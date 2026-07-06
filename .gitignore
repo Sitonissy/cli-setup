@@ -1,0 +1,18 @@
+# Secret local variables (do not push!)
+.zshlocal
+.env
+
+# macOS files
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Unpacked premium theme files (protection against accidental commit)
+*.itermcolors
+dracula_pro/
+dracula_pro_van_helsing/
+
+# Temporary editor files
+*.swp
+*.swo
+*~

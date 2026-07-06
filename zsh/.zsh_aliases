@@ -1,0 +1,32 @@
+# ==========================================
+# Navigation and basic commands
+# ==========================================
+alias ..='cd ..'
+alias ...='cd ../..'
+alias md='mkdir -p'
+alias c='clear'
+
+# ==========================================
+# Modern Unix: Replace statdart commands
+# ==========================================
+alias ls='eza --icons'
+alias ll='eza -la --icons --git'
+alias tree='eza --tree --icons'
+alias grep='rg'
+if command -v batcat >/dev/null 2>&1; then
+    alias cat='batcat'
+elif command -v bat >/dev/null 2>&1; then
+    alias cat='bat'
+fi
+
+# ==========================================
+# Git and multiplexors
+# ==========================================
+alias lg='lazygit'
+alias zj='zellij'
+
+# ==========================================
+# Network
+# ==========================================
+alias myip='curl -s ifconfig.me && echo'
+alias ports='lsof -i -P -n | grep LISTEN'

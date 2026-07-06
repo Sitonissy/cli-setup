@@ -1,0 +1,10 @@
+# =============================================================================
+# Local settings and secrets (do not commit to Git)
+# Copy this file to ~/.zshlocal and add your data.
+# =============================================================================
+
+# GitHub tokens / API keys
+# export GITHUB_TOKEN="your_token_here"
+
+# Specific paths for a specific machine that are not needed in the general zshrc
+# export PATH="/custom/local/path:$PATH"

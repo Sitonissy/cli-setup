@@ -1,0 +1,30 @@
+# =============================================================================
+# Git Configuration (Main)
+# =============================================================================
+
+[include]
+    path = ~/.gitconfig.local
+
+[core]
+    editor = vi
+    pager = delta
+
+[interactive]
+    diffFilter = delta --color-only
+
+[delta]
+    navigate = true
+    light = false
+    side-by-side = true
+
+[merge]
+    conflictstyle = diff3
+
+[diff]
+    colorMoved = default
+
+[init]
+    defaultBranch = main
+
+[pull]
+    rebase = true
