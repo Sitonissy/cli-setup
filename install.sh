@@ -59,7 +59,7 @@ fi
 pipx ensurepath
 
 # =====================================================================
-# 2.5 Install Oh My Zsh (if not already installed)
+# 2.5 Oh My Zsh, Powerlevel10k & Plugins
 # =====================================================================
 echo "======================================================"
 if [ ! -d "$HOME/.oh-my-zsh" ]; then
@@ -69,6 +69,28 @@ if [ ! -d "$HOME/.oh-my-zsh" ]; then
 else
     echo "✅ Oh My Zsh is already installed."
 fi
+
+ZSH_CUSTOM_DIR="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"
+
+# Powerlevel10k theme
+if [ ! -d "$ZSH_CUSTOM_DIR/themes/powerlevel10k" ]; then
+    echo "Installing Powerlevel10k theme..."
+    git clone --depth=1 https://github.com/romkatv/powerlevel10k.git "$ZSH_CUSTOM_DIR/themes/powerlevel10k"
+fi
+
+# zsh-autosuggestions plugin
+if [ ! -d "$ZSH_CUSTOM_DIR/plugins/zsh-autosuggestions" ]; then
+    echo "Installing zsh-autosuggestions..."
+    git clone --depth=1 https://github.com/zsh-users/zsh-autosuggestions "$ZSH_CUSTOM_DIR/plugins/zsh-autosuggestions"
+fi
+
+# zsh-syntax-highlighting plugin
+if [ ! -d "$ZSH_CUSTOM_DIR/plugins/zsh-syntax-highlighting" ]; then
+    echo "Installing zsh-syntax-highlighting..."
+    git clone --depth=1 https://github.com/zsh-users/zsh-syntax-highlighting.git "$ZSH_CUSTOM_DIR/plugins/zsh-syntax-highlighting"
+fi
+
+echo "✅ Oh My Zsh theme and plugins ready."
 
 # =====================================================================
 # 3. Premium Theme Installation (Interactive)
@@ -97,7 +119,6 @@ if [[ "$INSTALL_THEME" =~ ^[Yy]$ ]]; then
             if [ "$OS" = "Darwin" ]; then
                 echo "Importing iTerm2 theme (Van Helsing)..."
                 open "$TEMP_DIR/dracula-pro/iterm/Dracula Pro (Van Helsing).itermcolors"
-                # Give iTerm2 time to read the file before deleting TEMP_DIR
                 sleep 2
             fi
 
@@ -107,7 +128,6 @@ if [[ "$INSTALL_THEME" =~ ^[Yy]$ ]]; then
             echo "Skipping premium theme. The default terminal colors will be used."
         fi
 
-        # Always clean up temporary files
         rm -rf "$TEMP_DIR"
     fi
 else
@@ -129,7 +149,6 @@ if [[ "$CONFIG_GIT" =~ ^[Yy]$ ]]; then
 
     read -p "Enter your Git Email: " GIT_EMAIL
 
-    # Create the local gitconfig file
     cat > "$HOME/.gitconfig.local" << EOF
 [user]
     name = $GIT_NAME
@@ -137,12 +156,10 @@ if [[ "$CONFIG_GIT" =~ ^[Yy]$ ]]; then
 EOF
     echo "✅ Git basic credentials saved to ~/.gitconfig.local"
 
-    # Request GitHub Token silently
     read -sp "Enter your GitHub Personal Access Token (or press Enter to skip): " GITHUB_TOKEN
     echo ""
 
     if [ -n "$GITHUB_TOKEN" ]; then
-        # 1. Save to .zshlocal without duplicating existing GITHUB_TOKEN entries
         touch "$HOME/.zshlocal"
         grep -v "^export GITHUB_TOKEN=" "$HOME/.zshlocal" | grep -v "^# GitHub Token configured via install.sh" > "$HOME/.zshlocal.tmp" || true
         mv "$HOME/.zshlocal.tmp" "$HOME/.zshlocal"
@@ -154,7 +171,6 @@ EOF
         } >> "$HOME/.zshlocal"
         chmod 600 "$HOME/.zshlocal"
 
-        # 2. Configure Git to use the token for HTTPS authentication
         cat >> "$HOME/.gitconfig.local" << EOF
 [credential]
     helper = store
@@ -175,10 +191,8 @@ fi
 echo "======================================================"
 echo "Applying configurations using GNU Stow..."
 
-# Create target directories if they don't exist to prevent Stow from symlinking entire folders
 mkdir -p "$HOME/.vim"
 
-# Backup existing real files (not symlinks) to prevent Stow conflicts
 backup_if_exists() {
     if [ -f "$1" ] && [ ! -L "$1" ]; then
         local backup="${1}.bak.$(date +%s)"
@@ -188,10 +202,12 @@ backup_if_exists() {
 }
 
 backup_if_exists "$HOME/.zshrc"
+backup_if_exists "$HOME/.p10k.zsh"
+backup_if_exists "$HOME/.zsh_aliases"
+backup_if_exists "$HOME/.zshlocal.example"
 backup_if_exists "$HOME/.vimrc"
 backup_if_exists "$HOME/.gitconfig"
 
-# Restow (-R) modules into the home directory so re-runs work cleanly
 stow -v -R -t "$HOME" zsh vim git
 
 echo "✅ Configurations linked successfully."
