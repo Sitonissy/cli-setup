@@ -59,6 +59,18 @@ fi
 pipx ensurepath
 
 # =====================================================================
+# 2.5 Install Oh My Zsh (if not already installed)
+# =====================================================================
+echo "======================================================"
+if [ ! -d "$HOME/.oh-my-zsh" ]; then
+    echo "Installing Oh My Zsh..."
+    RUNZSH=no CHSH=no KEEP_ZSHRC=yes sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended --keep-zshrc
+    echo "✅ Oh My Zsh installed."
+else
+    echo "✅ Oh My Zsh is already installed."
+fi
+
+# =====================================================================
 # 3. Premium Theme Installation (Interactive)
 # =====================================================================
 echo "======================================================"
