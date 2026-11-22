@@ -24,9 +24,15 @@ fi
 # ==========================================
 alias lg='lazygit'
 alias zj='zellij'
+alias gs='git status'
+alias ga='git add .'
+alias gc='git commit -m'
+alias gp='git push'
+alias gl='git log --oneline --graph --decorate'
 
 # ==========================================
 # Network
 # ==========================================
 alias myip='curl -s ifconfig.me && echo'
+alias localip='ipconfig getifaddr en0'
 alias ports='lsof -i -P -n | grep LISTEN'
