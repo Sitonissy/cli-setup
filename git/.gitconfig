@@ -1,12 +1,8 @@
-# =============================================================================
-# Git Configuration (Main)
-# =============================================================================
-
 [include]
     path = ~/.gitconfig.local
 
 [core]
-    editor = vi
+    editor = vim
     pager = delta
 
 [interactive]
@@ -28,3 +24,4 @@
 
 [pull]
     rebase = true
+
